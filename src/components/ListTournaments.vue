@@ -13,18 +13,19 @@
           </md-field>
           <md-button class="md-raised md-primary" :disabled="boards < 1" @click="setDone('first', 'second')">Fortsätt</md-button>
         </md-step>
-        <md-step id="second" md-label="Antal rundor i turneringen" :md-editable="true" :md-done.sync="second">
-          <p>Till första rundan slumpas vilka spelare som möter varandra. Till de nästföljande rundorna kommer spelarna att möta motståndare som presterat i genomsnitt lika bra som dem själva.</p>
-          <md-field :class="messageClassRounds">
-            <label>Antal rundor</label>
-            <md-input v-model="rounds" type="number" min="0" required></md-input>
-            <span class="md-error">Du måste ange ett antal rundor</span>
+        <md-step id="second" md-label="Antal matcher i turneringen" :md-editable="true" :md-done.sync="second">
+          <p>Till första matchen slumpas vilka spelare som möter varandra. Till de nästföljande matcherna kommer spelarna att möta motståndare som presterat i genomsnitt lika bra som dem själva.</p>
+          <md-field :class="messageClassMatches">
+            <label>Antal matcher</label>
+            <md-input v-model="matches" type="number" min="0" required></md-input>
+            <span class="md-error">Du måste ange ett antal matcher</span>
           </md-field>
-          <md-button class="md-raised md-primary" :disabled="rounds < 1" @click="setDone('second', 'third')">Fortsätt</md-button>
+          <md-button class="md-raised md-primary" :disabled="matches < 1" @click="setDone('second', 'third')">Fortsätt</md-button>
         </md-step>
         <md-step id="third" md-label="Skapa turneringen" :md-editable="true" :md-done.sync="third">
+          <p>Vill du skapa följande turnering?</p>
           <p>Antal bräden: {{ boards }}</p>
-          <p>Antal rundor: {{ rounds }}</p>
+          <p>Antal matcher: {{ matches }}</p>
         </md-step>
       </md-steppers>
       <md-dialog-actions>
@@ -33,7 +34,7 @@
       </md-dialog-actions>
     </md-dialog>
 
-    <!-- Show empty state when no tournaments have not yet been created -->
+    <!-- Show empty state when no tournaments have yet been created -->
     <md-empty-state
       md-icon="casino"
       md-label="Skapa din första turnering"
@@ -47,35 +48,35 @@
 import moment from 'moment'
 import generate from 'nanoid/generate'
 
-function generateRound (index) {
+function generateMatch (matchIndex) {
   return {
-    number: index,
+    number: matchIndex,
     board: null,
     position: null,
-    match_point: null,
-    tournament_point: null
+    match_score: null,
+    tournament_score: null
   }
 }
 
-function generateRounds (numRounds) {
+function generateMatches (numMatches) {
   let a = []
-  for (let i = 0; i < numRounds; i++) {
-    a.push(generateRound(i))
+  for (let i = 0; i < numMatches; i++) {
+    a.push(generateMatch(i))
   }
   return a
 }
 
-function generatePlayer (index, numRounds) {
+function generatePlayer (playerIndex, numMatches) {
   return {
-    name: 'Spelare ' + (index + 1),
-    rounds: generateRounds(numRounds)
+    name: 'Spelare ' + (playerIndex + 1),
+    matches: generateMatches(numMatches)
   }
 }
 
-function generatePlayers (numBoards, numRounds) {
+function generatePlayers (numBoards, numMatches) {
   let a = []
   for (let i = 0; i < numBoards * 4; i++) {
-    a.push(generatePlayer(i, numRounds))
+    a.push(generatePlayer(i, numMatches))
   }
   return a
 }
@@ -89,7 +90,7 @@ export default {
     second: false,
     third: false,
     boards: null,
-    rounds: null
+    matches: null
   }),
   methods: {
     setDone (id, index) {
@@ -105,9 +106,9 @@ export default {
         JSON.stringify({
           created: moment().format(),
           number_of_boards: parseInt(this.boards, 10),
-          number_of_rounds: parseInt(this.rounds, 10),
-          current_round: -1,
-          players: generatePlayers(this.boards, this.rounds)
+          number_of_matches: parseInt(this.matches, 10),
+          current_match: -1,
+          players: generatePlayers(this.boards, this.matches)
         })
       )
       this.$router.push({ name: 'admin', query: { t: tid } })
@@ -119,9 +120,9 @@ export default {
         'md-invalid': this.boards != null && this.boards < 1
       }
     },
-    messageClassRounds () {
+    messageClassMatches () {
       return {
-        'md-invalid': this.rounds != null && this.rounds < 1
+        'md-invalid': this.matches != null && this.matches < 1
       }
     }
   }
