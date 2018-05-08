@@ -53,8 +53,8 @@ function generateMatch (matchIndex) {
     number: matchIndex,
     board: null,
     position: null,
-    match_score: null,
-    tournament_score: null
+    matchScore: null,
+    tournamentScore: null
   }
 }
 
@@ -105,9 +105,9 @@ export default {
         tid,
         JSON.stringify({
           created: moment().format(),
-          number_of_boards: parseInt(this.boards, 10),
-          number_of_matches: parseInt(this.matches, 10),
-          current_match: -1,
+          numberOfBoards: parseInt(this.boards, 10),
+          numberOfMatches: parseInt(this.matches, 10),
+          currentMatch: -1,
           players: generatePlayers(this.boards, this.matches)
         })
       )

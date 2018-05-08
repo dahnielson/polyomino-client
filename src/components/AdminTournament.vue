@@ -7,25 +7,25 @@
         <md-tab :md-label="'Bord ' + (board.number + 1)" v-for="board in boards" :key="board.number">
           <md-field>
             <label>{{ state.players[board.players[0]].name }} poäng</label>
-            <md-input v-model="state.players[board.players[0]].matches[state.current_match].match_score" type="number" max="5" required></md-input>
+            <md-input v-model="state.players[board.players[0]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
           </md-field>
           <md-field>
             <label>{{ state.players[board.players[1]].name }} poäng</label>
-            <md-input v-model="state.players[board.players[1]].matches[state.current_match].match_score" type="number" max="5" required></md-input>
+            <md-input v-model="state.players[board.players[1]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
           </md-field>
           <md-field>
             <label>{{ state.players[board.players[2]].name }} poäng</label>
-            <md-input v-model="state.players[board.players[2]].matches[state.current_match].match_score" type="number" max="5" required></md-input>
+            <md-input v-model="state.players[board.players[2]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
           </md-field>
           <md-field>
             <label>{{ state.players[board.players[3]].name }} poäng</label>
-            <md-input v-model="state.players[board.players[3]].matches[state.current_match].match_score" type="number" max="5" required></md-input>
+            <md-input v-model="state.players[board.players[3]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
           </md-field>
         </md-tab>
       </md-tabs>
       <md-dialog-actions>
         <md-button class="md-primary" @click="showScoreDialog = false">Stäng</md-button>
-        <md-button class="md-primary" @click="setMatchScore()">Nästa match</md-button>
+        <md-button class="md-primary" @click="gotoNextMatch()">Nästa match</md-button>
       </md-dialog-actions>
     </md-dialog>
 
@@ -45,8 +45,8 @@
         </md-table>
       </md-card-content>
       <md-card-actions>
-        <md-button :disabled="state.current_match < 0" @click="showScoreDialog = true">Ge poäng</md-button>
-        <md-button :disabled="state.current_match != -1" @click="drawInitialOrder()">Lotta</md-button>
+        <md-button :disabled="state.currentMatch < 0" @click="showScoreDialog = true">Ge poäng</md-button>
+        <md-button :disabled="state.currentMatch != -1" @click="drawInitialOrder()">Lotta</md-button>
       </md-card-actions>
     </md-card>
   </div>
@@ -66,7 +66,7 @@ export default {
     drawInitialOrder () {
       // Create and shuffle deck
       let tickets = []
-      for (let i = 0, len = this.state.number_of_boards * 4; i < len; i++) {
+      for (let i = 0, len = this.state.numberOfBoards * 4; i < len; i++) {
         tickets.push({board: Math.floor((i + 4) / 4 - 1), position: i % 4})
       }
       let deck = Shuffle.shuffle({deck: tickets})
@@ -77,12 +77,12 @@ export default {
         this.state.players[i].matches[0].position = draw.position
       }
       // Enter first match and sort players
-      this.state.current_match += 1
+      this.state.currentMatch += 1
       this.sortPlayers()
       this.updateBoards()
     },
     sortPlayers () {
-      const match = this.state.current_match
+      const match = this.state.currentMatch
       this.state.players.sort(function (a, b) {
         if (a.matches[match].position > b.matches[match].position) return 1
         if (a.matches[match].position < b.matches[match].position) return -1
@@ -94,16 +94,21 @@ export default {
     },
     updateBoards () {
       this.boards.splice(0, this.boards.length) // << this clears the array
-      for (let i = 0, len = this.state.number_of_boards; i < len; i++) {
-        this.boards.push({number: i, match: this.state.current_match, players: []})
+      for (let i = 0, len = this.state.numberOfBoards; i < len; i++) {
+        this.boards.push({number: i, match: this.state.currentMatch, players: []})
       }
       for (let i = 0, len = this.state.players.length; i < len; i++) {
-        const playerBoardIndex = this.state.players[i].matches[this.state.current_match].board
+        const playerBoardIndex = this.state.players[i].matches[this.state.currentMatch].board
         this.boards[playerBoardIndex].players.push(i)
       }
     },
-    setMatchScore () {
-      // TODO
+    gotoNextMatch () {
+      // Calculate tournament score from the match score
+      // Assign boards and positions from score
+      // Enter next match and sort players
+      this.state.currentMatch += 1
+      this.sortPlayers()
+      this.updateBoards()
     }
   },
   watch: {
