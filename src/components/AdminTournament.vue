@@ -70,18 +70,17 @@ export default {
         tickets.push({board: Math.floor((i + 4) / 4 - 1), position: i % 4})
       }
       let deck = Shuffle.shuffle({deck: tickets})
-      // Assign boards and positions
+      // Assign boards and positions from draw
+      this.state.currentMatch += 1
       for (let i = 0, len = this.state.players.length; i < len; i++) {
         let draw = deck.draw()
-        this.state.players[i].matches[0].board = draw.board
-        this.state.players[i].matches[0].position = draw.position
+        this.state.players[i].matches[this.state.currentMatch].board = draw.board
+        this.state.players[i].matches[this.state.currentMatch].position = draw.position
       }
-      // Enter first match and sort players
-      this.state.currentMatch += 1
-      this.sortPlayers()
+      this.sortPlayersByBoard()
       this.updateBoards()
     },
-    sortPlayers () {
+    sortPlayersByBoard () {
       const match = this.state.currentMatch
       this.state.players.sort(function (a, b) {
         if (a.matches[match].position > b.matches[match].position) return 1
@@ -90,6 +89,47 @@ export default {
       this.state.players.sort(function (a, b) {
         if (a.matches[match].board > b.matches[match].board) return 1
         if (a.matches[match].board < b.matches[match].board) return -1
+      })
+    },
+    gotoNextMatch () {
+      // Calculate tournament scores from match scores
+      for (let board = 0, len = this.state.numberOfBoards; board < len; board++) {
+        for (let lhsPlayer = 0; lhsPlayer < 4; lhsPlayer++) {
+          let lhsPlayerTournamentScore = 0.0
+          const lhsPlayerMatchScore = this.state.players[this.boards[board].players[lhsPlayer]].matches[this.currentMatch].matchScore
+          for (let rhsPlayer = 0; rhsPlayer < 4; rhsPlayer++) {
+            if (lhsPlayer === rhsPlayer) {
+              continue // is same player
+            }
+            const rhsPlayerMatchScore = this.state.players[this.boards[board].players[rhsPlayer]].matches[this.currentMatch].matchScore
+            if (lhsPlayerMatchScore === rhsPlayerMatchScore) {
+              lhsPlayerTournamentScore += 0.5 // draw
+            } else if (lhsPlayerMatchScore > rhsPlayerMatchScore) {
+              lhsPlayerTournamentScore += 1.0 // win
+            }
+          }
+          this.state.players[this.boards[board].players[lhsPlayer]].matches[this.currentMatch].tournamentScore = lhsPlayerTournamentScore
+        }
+      }
+      // Assign boards and positions from tournament scores
+      this.sortPlayersByScore()
+      this.state.currentMatch += 1
+      for (let i = 0, len = this.state.players.length; i < len; i++) {
+        this.state.players[i].matches[this.state.currentMatch].board = Math.floor((i + 4) / 4 - 1)
+        this.state.players[i].matches[this.state.currentMatch].position = i % 4
+      }
+      this.updateBoards()
+      this.showScoreDialog = false
+    },
+    sortPlayersByScore () {
+      const match = this.state.currentMatch
+      this.state.players.sort(function (a, b) {
+        if (a.matches[match].matchScore > b.matches[match].matchScore) return 1
+        if (a.matches[match].matchScore < b.matches[match].matchScore) return -1
+      })
+      this.state.players.sort(function (a, b) {
+        if (a.matches[match].tournamentScore > b.matches[match].tournamentScore) return 1
+        if (a.matches[match].tournamentScore < b.matches[match].tournamentScore) return -1
       })
     },
     updateBoards () {
@@ -101,14 +141,6 @@ export default {
         const playerBoardIndex = this.state.players[i].matches[this.state.currentMatch].board
         this.boards[playerBoardIndex].players.push(i)
       }
-    },
-    gotoNextMatch () {
-      // Calculate tournament score from the match score
-      // Assign boards and positions from score
-      // Enter next match and sort players
-      this.state.currentMatch += 1
-      this.sortPlayers()
-      this.updateBoards()
     }
   },
   watch: {
