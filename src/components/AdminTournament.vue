@@ -38,7 +38,7 @@
           </md-table-toolbar>
           <md-table-row slot="md-table-row" slot-scope="{ item }">
             <md-table-cell md-label="Spelare">{{ item.name }}</md-table-cell>
-            <md-table-cell :md-label="'Runda ' + (match.number + 1)" v-for="match in item.matches" :key="match.number" :class="match.position != null ? 'position' + (match.position + 1) : ''">
+            <md-table-cell :md-label="'Match ' + (match.number + 1)" v-for="match in item.matches" :key="match.number" :class="match.position != null ? 'position' + (match.position + 1) : ''">
               {{ match.board != null ? 'Bord' + (match.board + 1) : 'Ej spelad' }}
             </md-table-cell>
           </md-table-row>
