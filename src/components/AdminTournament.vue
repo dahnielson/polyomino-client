@@ -93,8 +93,7 @@ export default {
       })
     },
     updateBoards () {
-      // Clear array
-      this.boards.splice(0, this.boards.length)
+      this.boards.splice(0, this.boards.length) // << this clears the array
       for (let i = 0, len = this.state.number_of_boards; i < len; i++) {
         this.boards.push({number: i, match: this.state.current_match, players: []})
       }
