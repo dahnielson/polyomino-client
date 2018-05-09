@@ -39,7 +39,7 @@
           <md-table-row slot="md-table-row" slot-scope="{ item }">
             <md-table-cell md-label="Spelare">{{ item.name }}</md-table-cell>
             <md-table-cell :md-label="'Match ' + (match.number + 1)" v-for="match in item.matches" :key="match.number" :class="match.position != null ? 'position' + (match.position + 1) : ''">
-              {{ match.board != null ? 'Bord' + (match.board + 1) : 'Ej spelad' }}
+              {{ match.board != null ? 'Bord ' + (match.board + 1) : 'Ej spelad' }}
             </md-table-cell>
           </md-table-row>
         </md-table>
@@ -93,22 +93,26 @@ export default {
     },
     gotoNextMatch () {
       // Calculate tournament scores from match scores
-      for (let board = 0, len = this.state.numberOfBoards; board < len; board++) {
+      for (let board = 0, len = this.boards.length; board < len; board++) {
         for (let lhsPlayer = 0; lhsPlayer < 4; lhsPlayer++) {
           let lhsPlayerTournamentScore = 0.0
-          const lhsPlayerMatchScore = this.state.players[this.boards[board].players[lhsPlayer]].matches[this.currentMatch].matchScore
+          console.log('lhsPlayer ' + this.boards[board].players[lhsPlayer])
+          console.log(this.state.players[this.boards[board].players[lhsPlayer]].matches)
+          console.log(this.state.players[this.boards[board].players[lhsPlayer]].matches[this.state.currentMatch])
+          console.log(this.state.players[this.boards[board].players[lhsPlayer]].matches[this.state.currentMatch].matchScore)
+          const lhsPlayerMatchScore = this.state.players[this.boards[board].players[lhsPlayer]].matches[this.state.currentMatch].matchScore
           for (let rhsPlayer = 0; rhsPlayer < 4; rhsPlayer++) {
             if (lhsPlayer === rhsPlayer) {
               continue // is same player
             }
-            const rhsPlayerMatchScore = this.state.players[this.boards[board].players[rhsPlayer]].matches[this.currentMatch].matchScore
+            const rhsPlayerMatchScore = this.state.players[this.boards[board].players[rhsPlayer]].matches[this.state.currentMatch].matchScore
             if (lhsPlayerMatchScore === rhsPlayerMatchScore) {
               lhsPlayerTournamentScore += 0.5 // draw
             } else if (lhsPlayerMatchScore > rhsPlayerMatchScore) {
               lhsPlayerTournamentScore += 1.0 // win
             }
           }
-          this.state.players[this.boards[board].players[lhsPlayer]].matches[this.currentMatch].tournamentScore = lhsPlayerTournamentScore
+          this.state.players[this.boards[board].players[lhsPlayer]].matches[this.state.currentMatch].tournamentScore = lhsPlayerTournamentScore
         }
       }
       // Assign boards and positions from tournament scores
