@@ -65,7 +65,7 @@
         </md-table>
       </md-card-content>
       <md-card-actions>
-        <md-button :disabled="state.currentMatch < 0 || state.currentMatch === state.numberOfMatches - 1" @click="showScoreDialog = true">Ge poäng</md-button>
+        <md-button :disabled="state.currentMatch < 0 || state.currentMatch === state.numberOfMatches" @click="showScoreDialog = true">Ge poäng</md-button>
         <md-button :disabled="state.currentMatch != -1" @click="drawInitialOrder()">Lotta</md-button>
       </md-card-actions>
     </md-card>
