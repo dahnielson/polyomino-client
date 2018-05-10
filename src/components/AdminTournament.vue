@@ -25,7 +25,7 @@
       </md-tabs>
       <md-dialog-actions>
         <md-button class="md-primary" @click="showScoreDialog = false">Stäng</md-button>
-        <md-button class="md-primary" @click="gotoNextMatch()">Nästa match</md-button>
+        <md-button class="md-primary" @click="showScoreDialog = false; gotoNextMatch()">Nästa match</md-button>
       </md-dialog-actions>
     </md-dialog>
 
@@ -124,7 +124,6 @@ export default {
         this.state.players[i].matches[this.state.currentMatch].position = i % 4
       }
       this.updateBoards()
-      this.showScoreDialog = false
     },
     sortPlayersByScore () {
       this.state.players.sort(function (a, b) {
