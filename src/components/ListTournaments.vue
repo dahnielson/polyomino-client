@@ -69,7 +69,9 @@ function generateMatches (numMatches) {
 function generatePlayer (playerIndex, numMatches) {
   return {
     name: 'Spelare ' + (playerIndex + 1),
-    matches: generateMatches(numMatches)
+    matches: generateMatches(numMatches),
+    totalMatchScore: 0,
+    totalTournamentScore: 0,    
   }
 }
 
@@ -108,8 +110,6 @@ export default {
           numberOfBoards: parseInt(this.boards, 10),
           numberOfMatches: parseInt(this.matches, 10),
           currentMatch: -1,
-          totalMatchScore: 0,
-          totalTournamentScore: 0,
           players: generatePlayers(this.boards, this.matches)
         })
       )
