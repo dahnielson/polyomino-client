@@ -111,6 +111,11 @@ export default {
           this.state.players[this.boards[board].players[lhsPlayer]].matches[this.state.currentMatch].tournamentScore = lhsPlayerTournamentScore
         }
       }
+      // Accumulate scores
+      for (let i = 0, len = this.state.players.length; i < len; i++) {
+        this.state.players[i].totalMatchScore += this.state.players[i].matches[this.state.currentMatch].matchScore
+        this.state.players[i].totalTournamentScore += this.state.players[i].matches[this.state.currentMatch].tournamentScore
+      }
       // Assign boards and positions from tournament scores
       this.sortPlayersByScore()
       this.state.currentMatch += 1
@@ -122,14 +127,13 @@ export default {
       this.showScoreDialog = false
     },
     sortPlayersByScore () {
-      const match = this.state.currentMatch
       this.state.players.sort(function (a, b) {
-        if (a.matches[match].matchScore > b.matches[match].matchScore) return 1
-        if (a.matches[match].matchScore < b.matches[match].matchScore) return -1
+        if (a.totalMatchScore > b.totalMatchScore) return 1
+        if (a.totalMatchScore < b.totalMatchScore) return -1
       })
       this.state.players.sort(function (a, b) {
-        if (a.matches[match].tournamentScore > b.matches[match].tournamentScore) return 1
-        if (a.matches[match].tournamentScore < b.matches[match].tournamentScore) return -1
+        if (a.totalTournamentScore > b.totalTournamentScore) return 1
+        if (a.totalTournamentScore < b.totalTournamentScore) return -1
       })
     },
     updateBoards () {

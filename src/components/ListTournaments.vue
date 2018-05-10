@@ -108,6 +108,8 @@ export default {
           numberOfBoards: parseInt(this.boards, 10),
           numberOfMatches: parseInt(this.matches, 10),
           currentMatch: -1,
+          totalMatchScore: 0,
+          totalTournamentScore: 0,
           players: generatePlayers(this.boards, this.matches)
         })
       )
