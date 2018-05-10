@@ -7,19 +7,19 @@
         <md-tab :md-label="'Bord ' + (board.number + 1)" v-for="board in boards" :key="board.number">
           <md-field>
             <label>{{ state.players[board.players[0]].name }} poäng</label>
-            <md-input v-model="state.players[board.players[0]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
+            <md-input v-model.number="state.players[board.players[0]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
           </md-field>
           <md-field>
             <label>{{ state.players[board.players[1]].name }} poäng</label>
-            <md-input v-model="state.players[board.players[1]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
+            <md-input v-model.number="state.players[board.players[1]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
           </md-field>
           <md-field>
             <label>{{ state.players[board.players[2]].name }} poäng</label>
-            <md-input v-model="state.players[board.players[2]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
+            <md-input v-model.number="state.players[board.players[2]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
           </md-field>
           <md-field>
             <label>{{ state.players[board.players[3]].name }} poäng</label>
-            <md-input v-model="state.players[board.players[3]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
+            <md-input v-model.number="state.players[board.players[3]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
           </md-field>
         </md-tab>
       </md-tabs>

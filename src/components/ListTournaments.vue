@@ -8,7 +8,7 @@
           <p>På varje bräde som ingår i turneringen spelar fyra spelare åt gången.</p>
           <md-field :class="messageClassBoards">
             <label>Antal bräden</label>
-            <md-input v-model="boards" type="number" min="0" required></md-input>
+            <md-input v-model.number="boards" type="number" min="0" required></md-input>
             <span class="md-error">Du måste ange ett antal bräden</span>
           </md-field>
           <md-button class="md-raised md-primary" :disabled="boards < 1" @click="setDone('first', 'second')">Fortsätt</md-button>
@@ -17,7 +17,7 @@
           <p>Till första matchen slumpas vilka spelare som möter varandra. Till de nästföljande matcherna kommer spelarna att möta motståndare som presterat i genomsnitt lika bra som dem själva.</p>
           <md-field :class="messageClassMatches">
             <label>Antal matcher</label>
-            <md-input v-model="matches" type="number" min="0" required></md-input>
+            <md-input v-model.number="matches" type="number" min="0" required></md-input>
             <span class="md-error">Du måste ange ett antal matcher</span>
           </md-field>
           <md-button class="md-raised md-primary" :disabled="matches < 1" @click="setDone('second', 'third')">Fortsätt</md-button>
@@ -107,8 +107,8 @@ export default {
         tid,
         JSON.stringify({
           created: moment().format(),
-          numberOfBoards: parseInt(this.boards, 10),
-          numberOfMatches: parseInt(this.matches, 10),
+          numberOfBoards: this.boards,
+          numberOfMatches: this.matches,
           currentMatch: -1,
           players: generatePlayers(this.boards, this.matches)
         })
