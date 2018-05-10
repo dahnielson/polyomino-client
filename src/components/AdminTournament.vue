@@ -46,7 +46,7 @@
         </md-table>
       </md-card-content>
       <md-card-actions>
-        <md-button :disabled="state.currentMatch < 0" @click="showScoreDialog = true">Ge poäng</md-button>
+        <md-button :disabled="state.currentMatch < 0 || state.currentMatch === state.numberOfMatches - 1" @click="showScoreDialog = true">Ge poäng</md-button>
         <md-button :disabled="state.currentMatch != -1" @click="drawInitialOrder()">Lotta</md-button>
       </md-card-actions>
     </md-card>
@@ -127,12 +127,14 @@ export default {
         return 0
       })
       // Assign boards and positions
-      this.state.currentMatch += 1
-      for (let i = 0, len = this.state.players.length; i < len; i++) {
-        this.state.players[i].matches[this.state.currentMatch].board = Math.floor((i + 4) / 4 - 1)
-        this.state.players[i].matches[this.state.currentMatch].position = i % 4
+      if (this.state.currentMatch < this.state.numberOfMatches - 1) {
+        this.state.currentMatch += 1
+        for (let i = 0, len = this.state.players.length; i < len; i++) {
+          this.state.players[i].matches[this.state.currentMatch].board = Math.floor((i + 4) / 4 - 1)
+          this.state.players[i].matches[this.state.currentMatch].position = i % 4
+        }
+        this.updateBoards()
       }
-      this.updateBoards()
     },
     updateBoards () {
       this.boards.splice(0, this.boards.length) // << this clears the array
