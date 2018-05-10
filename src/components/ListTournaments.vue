@@ -71,7 +71,7 @@ function generatePlayer (playerIndex, numMatches) {
     name: 'Spelare ' + (playerIndex + 1),
     matches: generateMatches(numMatches),
     totalMatchScore: 0,
-    totalTournamentScore: 0,    
+    totalTournamentScore: 0
   }
 }
 
