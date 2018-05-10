@@ -117,12 +117,14 @@ export default {
       }
       // Sort players by score
       this.state.players.sort(function (a, b) {
-        if (a.totalMatchScore > b.totalMatchScore) return 1
-        if (a.totalMatchScore < b.totalMatchScore) return -1
+        if (a.totalMatchScore < b.totalMatchScore) return 1
+        if (a.totalMatchScore > b.totalMatchScore) return -1
+        return 0
       })
       this.state.players.sort(function (a, b) {
-        if (a.totalTournamentScore > b.totalTournamentScore) return 1
-        if (a.totalTournamentScore < b.totalTournamentScore) return -1
+        if (a.totalTournamentScore < b.totalTournamentScore) return 1
+        if (a.totalTournamentScore > b.totalTournamentScore) return -1
+        return 0
       })
       // Assign boards and positions
       this.state.currentMatch += 1
