@@ -97,20 +97,22 @@ export default {
       let deck = Shuffle.shuffle({deck: tickets})
       // Assign boards and positions from draw
       this.state.currentMatch += 1
-      const match = this.state.currentMatch
       for (let i = 0, len = this.state.players.length; i < len; i++) {
         let draw = deck.draw()
-        this.state.players[i].matches[match].board = draw.board
-        this.state.players[i].matches[match].position = draw.position
+        this.state.players[i].matches[this.state.currentMatch].board = draw.board
+        this.state.players[i].matches[this.state.currentMatch].position = draw.position
       }
       // Sort players by board
       this.state.players.sort(function (a, b) {
-        if (a.matches[match].position > b.matches[match].position) return 1
-        if (a.matches[match].position < b.matches[match].position) return -1
-      })
-      this.state.players.sort(function (a, b) {
-        if (a.matches[match].board > b.matches[match].board) return 1
-        if (a.matches[match].board < b.matches[match].board) return -1
+        if (a.matches[0].board > b.matches[0].board) {
+          return 1
+        } else if (a.matches[0].board < b.matches[0].board) {
+          return -1
+        } else {
+          if (a.matches[0].position > b.matches[0].position) return 1
+          if (a.matches[0].position < b.matches[0].position) return -1
+          else return 0
+        }
       })
       this.updateBoards()
     },
@@ -141,14 +143,15 @@ export default {
       }
       // Sort players by score
       this.state.players.sort(function (a, b) {
-        if (a.totalMatchScore < b.totalMatchScore) return 1
-        if (a.totalMatchScore > b.totalMatchScore) return -1
-        return 0
-      })
-      this.state.players.sort(function (a, b) {
-        if (a.totalTournamentScore < b.totalTournamentScore) return 1
-        if (a.totalTournamentScore > b.totalTournamentScore) return -1
-        return 0
+        if (a.totalTournamentScore < b.totalTournamentScore) {
+          return 1
+        } else if (a.totalTournamentScore > b.totalTournamentScore) {
+          return -1
+        } else {
+          if (a.totalMatchScore < b.totalMatchScore) return 1
+          if (a.totalMatchScore > b.totalMatchScore) return -1
+          else return 0
+        }
       })
       // Assign boards and positions
       if (this.state.currentMatch < this.state.numberOfMatches - 1) {
