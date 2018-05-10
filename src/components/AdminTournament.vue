@@ -96,10 +96,6 @@ export default {
       for (let board = 0, len = this.boards.length; board < len; board++) {
         for (let lhsPlayer = 0; lhsPlayer < 4; lhsPlayer++) {
           let lhsPlayerTournamentScore = 0.0
-          console.log('lhsPlayer ' + this.boards[board].players[lhsPlayer])
-          console.log(this.state.players[this.boards[board].players[lhsPlayer]].matches)
-          console.log(this.state.players[this.boards[board].players[lhsPlayer]].matches[this.state.currentMatch])
-          console.log(this.state.players[this.boards[board].players[lhsPlayer]].matches[this.state.currentMatch].matchScore)
           const lhsPlayerMatchScore = this.state.players[this.boards[board].players[lhsPlayer]].matches[this.state.currentMatch].matchScore
           for (let rhsPlayer = 0; rhsPlayer < 4; rhsPlayer++) {
             if (lhsPlayer === rhsPlayer) {
