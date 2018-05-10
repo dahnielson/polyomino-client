@@ -2,7 +2,7 @@
   <div>
     <!-- Score dialog -->
     <md-dialog :md-active.sync="showScoreDialog">
-      <md-dialog-title>Matchpoäng</md-dialog-title>
+      <md-dialog-title>Match {{ state.currentMatch + 1 }}</md-dialog-title>
       <md-tabs md-alignment="fixed">
         <md-tab :md-label="'Bord ' + (board.number + 1)" v-for="board in boards" :key="board.number">
           <md-field>
