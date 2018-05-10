@@ -1,5 +1,17 @@
 <template>
   <div>
+    <!-- Edit player dialog -->
+    <md-dialog :md-active.sync="showPlayerDialog">
+      <md-dialog-title>Redigera spelare</md-dialog-title>
+      <md-field>
+        <label>Namn</label>
+        <md-input v-if="selectedPlayer" v-model="selectedPlayer.name"></md-input>
+      </md-field>
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="showPlayerDialog = false">Stäng</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
     <!-- Score dialog -->
     <md-dialog :md-active.sync="showScoreDialog">
       <md-dialog-title>Match {{ state.currentMatch + 1 }}</md-dialog-title>
@@ -32,16 +44,23 @@
     <!-- Table of players -->
     <md-card>
       <md-card-content>
-        <md-table v-model="state.players">
+        <md-table v-model="state.players" @md-selected="onSelect">
           <md-table-toolbar>
             <h1 class="md-title">Turnering</h1>
           </md-table-toolbar>
-          <md-table-row slot="md-table-row" slot-scope="{ item }">
-            <md-table-cell md-label="Spelare">{{ item.name }}</md-table-cell>
+          <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="single">
+            <md-table-cell md-label="Spelare">
+              {{ item.name }}
+            </md-table-cell>
             <md-table-cell :md-label="'Match ' + (match.number + 1)" v-for="match in item.matches" :key="match.number" :class="match.position != null ? 'position' + (match.position + 1) : ''">
               {{ match.board != null ? 'Bord ' + (match.board + 1) : 'Ej spelad' }}
             </md-table-cell>
             <md-table-cell md-label="Poäng">{{ item.totalTournamentScore }} ({{ item.totalMatchScore}})</md-table-cell>
+            <md-table-cell>
+              <md-button class="md-icon-button" @click="showPlayerDialog = true">
+                  <md-icon>edit</md-icon>
+              </md-button>
+            </md-table-cell>
           </md-table-row>
         </md-table>
       </md-card-content>
@@ -60,10 +79,15 @@ export default {
   name: 'AdminTournament',
   data: () => ({
     showScoreDialog: false,
+    showPlayerDialog: false,
+    selectedPlayer: null,
     state: {},
     boards: []
   }),
   methods: {
+    onSelect (item) {
+      this.selectedPlayer = item
+    },
     drawInitialOrder () {
       // Create and shuffle deck
       let tickets = []
