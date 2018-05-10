@@ -166,18 +166,18 @@ export default {
 <style scoped>
 .position1 {
   color: white;
-  background-color: blue;
+  background-color: #448aff;
 }
 .position2 {
   color: black;
-  background-color: yellow;
+  background-color: #ffff00;
 }
 .position3 {
   color: white;
-  background-color: red;
+  background-color: #ff5252;
 }
 .position4 {
   color: white;
-  background-color: green;
+  background-color: #69f0ae;
 }
 </style>
