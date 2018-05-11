@@ -160,8 +160,6 @@ export default {
           this.state.players[i].matches[this.state.currentMatch].position = i % 4
         }
         this.updateBoards()
-      } else {
-        this.state.currentMatch += 1
       }
     },
     updateBoards () {
