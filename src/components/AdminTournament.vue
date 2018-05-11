@@ -140,26 +140,28 @@ export default {
         this.state.players[i].totalMatchScore += this.state.players[i].matches[this.state.currentMatch].matchScore
         this.state.players[i].totalTournamentScore += this.state.players[i].matches[this.state.currentMatch].tournamentScore
       }
-      // Sort players by score
-      this.state.players.sort(function (a, b) {
-        if (a.totalTournamentScore < b.totalTournamentScore) {
-          return 1
-        } else if (a.totalTournamentScore > b.totalTournamentScore) {
-          return -1
-        } else {
-          if (a.totalMatchScore < b.totalMatchScore) return 1
-          if (a.totalMatchScore > b.totalMatchScore) return -1
-          else return 0
-        }
-      })
-      // Assign boards and positions
       if (this.state.currentMatch < this.state.numberOfMatches - 1) {
+        // Sort players by score
+        this.state.players.sort(function (a, b) {
+          if (a.totalTournamentScore < b.totalTournamentScore) {
+            return 1
+          } else if (a.totalTournamentScore > b.totalTournamentScore) {
+            return -1
+          } else {
+            if (a.totalMatchScore < b.totalMatchScore) return 1
+            if (a.totalMatchScore > b.totalMatchScore) return -1
+            else return 0
+          }
+        })
+        // Assign boards and positions
         this.state.currentMatch += 1
         for (let i = 0, len = this.state.players.length; i < len; i++) {
           this.state.players[i].matches[this.state.currentMatch].board = Math.floor((i + 4) / 4 - 1)
           this.state.players[i].matches[this.state.currentMatch].position = i % 4
         }
         this.updateBoards()
+      } else {
+        this.state.currentMatch += 1
       }
     },
     updateBoards () {
