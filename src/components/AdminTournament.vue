@@ -16,7 +16,7 @@
     <md-dialog :md-active.sync="showScoreDialog">
       <md-dialog-title>Match {{ state.currentMatch + 1 }}</md-dialog-title>
       <md-tabs md-alignment="fixed">
-        <md-tab :md-label="'Bord ' + (board.number + 1)" v-for="board in boards" :key="board.number">
+        <md-tab :md-label="'Bord ' + (board.number + 1)" v-for="board in state.boards" :key="board.number">
           <md-field>
             <label>{{ state.players[board.players[0]].name }} poäng</label>
             <md-input v-model.number="state.players[board.players[0]].matches[state.currentMatch].matchScore" type="number" max="5" required></md-input>
@@ -81,8 +81,7 @@ export default {
     showScoreDialog: false,
     showPlayerDialog: false,
     selectedPlayer: null,
-    state: {},
-    boards: []
+    state: {}
   }),
   methods: {
     onSelect (item) {
@@ -118,22 +117,22 @@ export default {
     },
     gotoNextMatch () {
       // Calculate tournament scores from match scores
-      for (let board = 0, len = this.boards.length; board < len; board++) {
+      for (let board = 0, len = this.state.boards.length; board < len; board++) {
         for (let lhsPlayer = 0; lhsPlayer < 4; lhsPlayer++) {
           let lhsPlayerTournamentScore = 0.0
-          const lhsPlayerMatchScore = this.state.players[this.boards[board].players[lhsPlayer]].matches[this.state.currentMatch].matchScore
+          const lhsPlayerMatchScore = this.state.players[this.state.boards[board].players[lhsPlayer]].matches[this.state.currentMatch].matchScore
           for (let rhsPlayer = 0; rhsPlayer < 4; rhsPlayer++) {
             if (lhsPlayer === rhsPlayer) {
               continue // is same player
             }
-            const rhsPlayerMatchScore = this.state.players[this.boards[board].players[rhsPlayer]].matches[this.state.currentMatch].matchScore
+            const rhsPlayerMatchScore = this.state.players[this.state.boards[board].players[rhsPlayer]].matches[this.state.currentMatch].matchScore
             if (lhsPlayerMatchScore === rhsPlayerMatchScore) {
               lhsPlayerTournamentScore += 0.5 // draw
             } else if (lhsPlayerMatchScore > rhsPlayerMatchScore) {
               lhsPlayerTournamentScore += 1.0 // win
             }
           }
-          this.state.players[this.boards[board].players[lhsPlayer]].matches[this.state.currentMatch].tournamentScore = lhsPlayerTournamentScore
+          this.state.players[this.state.boards[board].players[lhsPlayer]].matches[this.state.currentMatch].tournamentScore = lhsPlayerTournamentScore
         }
       }
       // Accumulate scores
@@ -164,13 +163,13 @@ export default {
       }
     },
     updateBoards () {
-      this.boards.splice(0, this.boards.length) // << this clears the array
+      this.state.boards.splice(0, this.state.boards.length) // << this clears the array
       for (let i = 0, len = this.state.numberOfBoards; i < len; i++) {
-        this.boards.push({number: i, match: this.state.currentMatch, players: []})
+        this.state.boards.push({number: i, match: this.state.currentMatch, players: []})
       }
       for (let i = 0, len = this.state.players.length; i < len; i++) {
         const playerBoardIndex = this.state.players[i].matches[this.state.currentMatch].board
-        this.boards[playerBoardIndex].players.push(i)
+        this.state.boards[playerBoardIndex].players.push(i)
       }
     }
   },

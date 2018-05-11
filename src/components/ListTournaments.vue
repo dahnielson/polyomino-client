@@ -110,7 +110,8 @@ export default {
           numberOfBoards: this.boards,
           numberOfMatches: this.matches,
           currentMatch: -1,
-          players: generatePlayers(this.boards, this.matches)
+          players: generatePlayers(this.boards, this.matches),
+          boards: []
         })
       )
       this.$router.push({ name: 'admin', query: { t: tid } })
