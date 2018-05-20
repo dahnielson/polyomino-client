@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import format from 'date-fns/format'
 import generate from 'nanoid/generate'
 
 function generateMatch (matchIndex) {
@@ -106,7 +106,7 @@ export default {
       localStorage.setItem(
         tid,
         JSON.stringify({
-          created: moment().format(),
+          created: format(),
           numberOfBoards: this.boards,
           numberOfMatches: this.matches,
           currentMatch: -1,
