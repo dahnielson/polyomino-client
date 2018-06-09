@@ -1,5 +1,7 @@
 # polyomino-client
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/dahnielson/polyomino-client.svg)](https://greenkeeper.io/)
+
 > Polyomino is a modified Swiss tournament management system for Blokus.
 
 ## Build Setup
